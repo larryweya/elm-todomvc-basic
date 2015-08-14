@@ -3544,6 +3544,113 @@ Elm.Html.Attributes.make = function (_elm) {
                                  ,attribute: attribute};
    return _elm.Html.Attributes.values;
 };
+Elm.Html = Elm.Html || {};
+Elm.Html.Events = Elm.Html.Events || {};
+Elm.Html.Events.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Events = _elm.Html.Events || {};
+   if (_elm.Html.Events.values)
+   return _elm.Html.Events.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Events",
+   $Basics = Elm.Basics.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var keyCode = A2($Json$Decode._op[":="],
+   "keyCode",
+   $Json$Decode.$int);
+   var targetChecked = A2($Json$Decode.at,
+   _L.fromArray(["target"
+                ,"checked"]),
+   $Json$Decode.bool);
+   var targetValue = A2($Json$Decode.at,
+   _L.fromArray(["target"
+                ,"value"]),
+   $Json$Decode.string);
+   var defaultOptions = $VirtualDom.defaultOptions;
+   var Options = F2(function (a,
+   b) {
+      return {_: {}
+             ,preventDefault: b
+             ,stopPropagation: a};
+   });
+   var onWithOptions = $VirtualDom.onWithOptions;
+   var on = $VirtualDom.on;
+   var messageOn = F3(function (name,
+   addr,
+   msg) {
+      return A3(on,
+      name,
+      $Json$Decode.value,
+      function (_v0) {
+         return function () {
+            return A2($Signal.message,
+            addr,
+            msg);
+         }();
+      });
+   });
+   var onClick = messageOn("click");
+   var onDoubleClick = messageOn("dblclick");
+   var onMouseMove = messageOn("mousemove");
+   var onMouseDown = messageOn("mousedown");
+   var onMouseUp = messageOn("mouseup");
+   var onMouseEnter = messageOn("mouseenter");
+   var onMouseLeave = messageOn("mouseleave");
+   var onMouseOver = messageOn("mouseover");
+   var onMouseOut = messageOn("mouseout");
+   var onBlur = messageOn("blur");
+   var onFocus = messageOn("focus");
+   var onSubmit = messageOn("submit");
+   var onKey = F3(function (name,
+   addr,
+   handler) {
+      return A3(on,
+      name,
+      keyCode,
+      function (code) {
+         return A2($Signal.message,
+         addr,
+         handler(code));
+      });
+   });
+   var onKeyUp = onKey("keyup");
+   var onKeyDown = onKey("keydown");
+   var onKeyPress = onKey("keypress");
+   _elm.Html.Events.values = {_op: _op
+                             ,onBlur: onBlur
+                             ,onFocus: onFocus
+                             ,onSubmit: onSubmit
+                             ,onKeyUp: onKeyUp
+                             ,onKeyDown: onKeyDown
+                             ,onKeyPress: onKeyPress
+                             ,onClick: onClick
+                             ,onDoubleClick: onDoubleClick
+                             ,onMouseMove: onMouseMove
+                             ,onMouseDown: onMouseDown
+                             ,onMouseUp: onMouseUp
+                             ,onMouseEnter: onMouseEnter
+                             ,onMouseLeave: onMouseLeave
+                             ,onMouseOver: onMouseOver
+                             ,onMouseOut: onMouseOut
+                             ,on: on
+                             ,onWithOptions: onWithOptions
+                             ,defaultOptions: defaultOptions
+                             ,targetValue: targetValue
+                             ,targetChecked: targetChecked
+                             ,keyCode: keyCode
+                             ,Options: Options};
+   return _elm.Html.Events.values;
+};
 Elm.Json = Elm.Json || {};
 Elm.Json.Decode = Elm.Json.Decode || {};
 Elm.Json.Decode.make = function (_elm) {
@@ -4061,6 +4168,8 @@ Elm.Main.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
@@ -4068,7 +4177,25 @@ Elm.Main.make = function (_elm) {
    $StartApp = Elm.StartApp.make(_elm);
    var update = F2(function (action,
    model) {
-      return model;
+      return function () {
+         switch (action.ctor)
+         {case "AddTodo":
+            return _U.replace([["field",""]
+                              ,["todos"
+                               ,A2($Basics._op["++"],
+                               model.todos,
+                               _L.fromArray([{_: {}
+                                             ,complete: false
+                                             ,description: model.field
+                                             ,uid: 2}]))]],
+              model);
+            case "UpdateField":
+            return _U.replace([["field"
+                               ,action._0]],
+              model);}
+         _U.badCase($moduleName,
+         "between lines 92 and 100");
+      }();
    });
    var todoFooter = A2($Html.footer,
    _L.fromArray([$Html$Attributes.$class("footer")]),
@@ -4112,44 +4239,81 @@ Elm.Main.make = function (_elm) {
                    _L.fromArray([$Html$Attributes.$class("desctroy")]),
                    _L.fromArray([]))]))]));
    };
-   var todoHeader = A2($Html.header,
-   _L.fromArray([$Html$Attributes.$class("header")]),
-   _L.fromArray([A2($Html.h1,
-                _L.fromArray([]),
-                _L.fromArray([$Html.text("Todos")]))
-                ,A2($Html.input,
-                _L.fromArray([$Html$Attributes.$class("new-todo")
-                             ,$Html$Attributes.placeholder("What to do?")]),
-                _L.fromArray([]))]));
-   var model = {_: {}
-               ,todos: _L.fromArray([{_: {}
-                                     ,complete: false
-                                     ,description: "Learn Elm"
-                                     ,uid: 1}])};
-   var todoMain = A2($Html.section,
-   _L.fromArray([$Html$Attributes.$class("main")]),
-   _L.fromArray([A2($Html.input,
-                _L.fromArray([$Html$Attributes.$class("toggle-all")
-                             ,$Html$Attributes.type$("checkbox")]),
-                _L.fromArray([]))
-                ,A2($Html.label,
-                _L.fromArray([$Html$Attributes.$for("toggle-all")]),
-                _L.fromArray([$Html.text("Mark all as complete")]))
-                ,A2($Html.ul,
-                _L.fromArray([$Html$Attributes.$class("todo-list")]),
-                A2($List.map,
-                todoItem,
-                model.todos))]));
+   var todoMain = F2(function (address,
+   model) {
+      return A2($Html.section,
+      _L.fromArray([$Html$Attributes.$class("main")]),
+      _L.fromArray([A2($Html.input,
+                   _L.fromArray([$Html$Attributes.$class("toggle-all")
+                                ,$Html$Attributes.type$("checkbox")]),
+                   _L.fromArray([]))
+                   ,A2($Html.label,
+                   _L.fromArray([$Html$Attributes.$for("toggle-all")]),
+                   _L.fromArray([$Html.text("Mark all as complete")]))
+                   ,A2($Html.ul,
+                   _L.fromArray([$Html$Attributes.$class("todo-list")]),
+                   A2($List.map,
+                   todoItem,
+                   model.todos))]));
+   });
+   var is13 = function (code) {
+      return _U.eq(code,
+      13) ? $Result.Ok({ctor: "_Tuple0"}) : $Result.Err("not the right key code");
+   };
+   var onEnter = F2(function (address,
+   value) {
+      return A3($Html$Events.on,
+      "keydown",
+      A2($Json$Decode.customDecoder,
+      $Html$Events.keyCode,
+      is13),
+      function (_v2) {
+         return function () {
+            return A2($Signal.message,
+            address,
+            value);
+         }();
+      });
+   });
+   var UpdateField = function (a) {
+      return {ctor: "UpdateField"
+             ,_0: a};
+   };
+   var AddTodo = {ctor: "AddTodo"};
+   var todoHeader = F2(function (address,
+   model) {
+      return A2($Html.header,
+      _L.fromArray([$Html$Attributes.$class("header")]),
+      _L.fromArray([A2($Html.h1,
+                   _L.fromArray([]),
+                   _L.fromArray([$Html.text("Todos")]))
+                   ,A2($Html.input,
+                   _L.fromArray([$Html$Attributes.$class("new-todo")
+                                ,$Html$Attributes.placeholder("What to do?")
+                                ,$Html$Attributes.value(model.field)
+                                ,A3($Html$Events.on,
+                                "input",
+                                $Html$Events.targetValue,
+                                function ($) {
+                                   return $Signal.message(address)(UpdateField($));
+                                })
+                                ,A2(onEnter,address,AddTodo)]),
+                   _L.fromArray([]))]));
+   });
    var view = F2(function (address,
    model) {
       return A2($Html.section,
       _L.fromArray([$Html$Attributes.$class("todoapp")]),
-      _L.fromArray([todoHeader
-                   ,todoMain
+      _L.fromArray([A2(todoHeader,
+                   address,
+                   model)
+                   ,A2(todoMain,address,model)
                    ,todoFooter]));
    });
    var main = $StartApp.start({_: {}
-                              ,model: model
+                              ,model: {_: {}
+                                      ,field: ""
+                                      ,todos: _L.fromArray([])}
                               ,update: update
                               ,view: view});
    var Todo = F3(function (a,b,c) {
@@ -4158,15 +4322,20 @@ Elm.Main.make = function (_elm) {
              ,description: a
              ,uid: c};
    });
-   var Model = function (a) {
-      return {_: {},todos: a};
-   };
+   var Model = F2(function (a,b) {
+      return {_: {}
+             ,field: b
+             ,todos: a};
+   });
    _elm.Main.values = {_op: _op
                       ,Model: Model
                       ,Todo: Todo
+                      ,AddTodo: AddTodo
+                      ,UpdateField: UpdateField
                       ,main: main
-                      ,model: model
                       ,view: view
+                      ,onEnter: onEnter
+                      ,is13: is13
                       ,todoHeader: todoHeader
                       ,todoMain: todoMain
                       ,todoItem: todoItem
